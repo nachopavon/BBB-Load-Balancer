@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Bbb-load-balancer by brunogoossens</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Bbb-load-balancer</h1>
+        <h2>Load Balancer for BigBlueButton</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/brunogoossens/BBB-Load-Balancer/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/brunogoossens/BBB-Load-Balancer/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/brunogoossens/BBB-Load-Balancer" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="bbb-load-balancer" class="anchor" href="#bbb-load-balancer" aria-hidden="true"><span class="octicon octicon-link"></span></a>BBB Load balancer</h1>
+
+<p>This project was developed to load balance BigBlueButton servers.
+It is written in PHP and based on the Symfony Standard Edition framework.
+A web application is included to manage servers and users, but it can also be managed with the API. The API docs can be found on the web app.</p>
+
+<p>The loadbalancer uses the same API as the default <a href="https://code.google.com/p/bigbluebutton/wiki/API">BBB API</a>.</p>
+
+<p>The following API methods are currently supported:</p>
+
+<ul>
+<li>create</li>
+<li>join</li>
+<li>end</li>
+<li>isMeetingRunning</li>
+<li>getMeetingInfo</li>
+<li>getMeetings</li>
+</ul>
+
+<p>The following API methods are currently <strong>NOT</strong> supported:</p>
+
+<ul>
+<li>getDefaultConfigXML</li>
+<li>setConfigXML</li>
+<li>getRecordings</li>
+<li>publishRecordings</li>
+<li>deleteRecordings</li>
+</ul>
+
+<h1>
+<a id="quick-setup" class="anchor" href="#quick-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick setup</h1>
+
+<p>You can use a chef recipe to setup your server or setup a vagrant box.</p>
+
+<p><a href="https://github.com/brunogoossens/BBBLB-Chef-cookbook">https://github.com/brunogoossens/BBBLB-Chef-cookbook</a></p>
+
+<h1>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h1>
+
+<p>Dependencies</p>
+
+<pre><code>sudo apt-get install php5-common
+sudo apt-get install php5
+sudo apt-get install php5-xcache
+sudo apt-get install php5-mongo
+sudo apt-get install php5-fpm
+sudo apt-get install php5-curl
+sudo apt-get install mongodb
+sudo apt-get install npm
+</code></pre>
+
+<p>Get the code</p>
+
+<pre><code>git clone git@github.com:brunogoossens/BBB-Load-Balancer.git /var/www/bbb-load-balancer
+cd /var/www/bbb-load-balancer
+</code></pre>
+
+<p>Get NPM packages</p>
+
+<pre><code>$ npm install
+</code></pre>
+
+<p>Edit the config file</p>
+
+<pre><code>$ cp app/config/parameters.yml.dist app/config/parameters.yml
+</code></pre>
+
+<p>Change the bbb.salt value inside the file. The salt must be the same on all BBB servers
+You can also change other values if you like.</p>
+
+<p>Get composer</p>
+
+<pre><code>$ curl -s https://getcomposer.org/installer | php
+</code></pre>
+
+<p>Update and install packages with composer</p>
+
+<pre><code>$ composer update
+</code></pre>
+
+<p>Start server (without apache or nginx)</p>
+
+<pre><code>$ app/console server:run --env=prod
+</code></pre>
+
+<p>If you want to configure an other server like apache or nginx, you can follow <a href="http://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html">this</a> guide.</p>
+
+<p>To automatically enable and disable servers based on there status, you can add this cronjob.</p>
+
+<pre><code>* * * * * /path/to/project/app/console bbblb:servers:check --env=prod
+</code></pre>
+
+<p>To remove stopped meetings from the load balancer.</p>
+
+<pre><code>* * * * * /path/to/project/app/console bbblb:meetings:cleanup --env=prod
+</code></pre>
+
+<h1>
+<a id="adding-bbb-servers-to-the-load-balancer" class="anchor" href="#adding-bbb-servers-to-the-load-balancer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adding BBB Servers to the load balancer</h1>
+
+<p>Access the web interface: <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> (or vhost configured in apache or nginx)
+The first time you access this page, you must create an admin user. After creating this user, you can manage the BBB load balancer. You need to add at least 1 BBB server to the list of servers before you can use the load balancer.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
