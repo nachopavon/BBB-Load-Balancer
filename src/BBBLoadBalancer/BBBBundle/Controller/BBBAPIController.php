@@ -58,8 +58,17 @@ class BBBAPIController extends Controller
             $save = true;
         }
 
-        $return = $this->get('bbb')->doRequest($server->getUrl() . $this->get('bbb')->cleanUri($request->getRequestUri()));
+	// Pre-upload slide: post request xml body with embebed base64 file content
+	if ($request->getMethod() == 'POST') {
+			
+		$slide  = $request->getContent();
+		$return = $this->get('bbb')->doPost2($server->getUrl().$this->get('bbb')->cleanUri($request->getRequestUri()),$request);
 
+	} else {
+
+	        $return = $this->get('bbb')->doRequest($server->getUrl().$this->get('bbb')->cleanUri($request->getRequestUri()));
+	}
+	
         if(!$return){
             return $this->errorResponse($server);
         }
