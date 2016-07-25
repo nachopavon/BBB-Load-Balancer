@@ -18,9 +18,9 @@ The following API methods are currently supported:
 
 The following API methods are currently **NOT** supported:
 
-- getDefaultConfigXML
-- setConfigXML
-- getRecordings
+~~- getDefaultConfigXML~~
+~~- setConfigXML~~
+~~- getRecordings~~
 - publishRecordings
 - deleteRecordings
 
